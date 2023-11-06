@@ -1,0 +1,111 @@
+[
+    {
+        "prompt": "What is the field name and data type of the Sales Document in the VBAK table?",
+        "completion": "In the VBAK table, the field name is VBELN and it has the data type NVARCHAR."
+    },
+    {
+        "prompt": "Tell me the field name and data type of the Net Value of the Sales Order in Document Currency in the VBAK table.",
+        "completion": "The Net Value of the Sales Order in the VBAK table is represented by the field name NETWR with the data type DECIMAL."
+    },
+    {
+        "prompt": "From the sales table, what is the field name and data type of the customer?",
+        "completion": "In the VBAK table, the field KUNNR is used as the customer. It is of type NVARCHAR."
+    },
+    {
+        "prompt": "Can you provide me the field name and data type of the customer name (Sold-to party) in the sales table?",
+        "completion": "Certainly! In the VBAK table, the customer name field is represented by KUNNR and it is of type NVARCHAR."
+    },
+    {
+        "prompt": "From the material table, what is the field name and data type of the material type?",
+        "completion": "The material type field in the MARA table is denoted by the field name MTART with the data type NVARCHAR."
+    },
+    {
+        "prompt": "What is the field name and data type of the material number in the material master table?",
+        "completion": "The field material number in the MARA table corresponds to the field name MATNR and it has the data type NVARCHAR."
+    },
+    {
+        "prompt": "Please provide the field name and data type of the document currency field in the sales table.",
+        "completion": "The Document Currency field in the VBAK table is represented by the field name WAERK and it has the data type NVARCHAR."
+    },
+    {
+        "prompt": "Tell me the field name and data type of the Date on Which Record Was Created in the sales (VBAK) table.",
+        "completion": "Certainly! The date of creation field in the VBAK table is identified by the field name ERDAT and it has the data type NVARCHAR."
+    },
+    {
+        "prompt": "From the sales table, what is the field name and data type of the sales organization?",
+        "completion": "In the VBAK table, the field sales organization is denoted by the field name VKORG with the data type NVARCHAR."
+    },
+    {
+        "prompt": "What is the field name and data type of the Sales Document Item in the sales item (VBAP) table?",
+        "completion": "The field name for the Sales Document Item in the VBAP table is POSNR, and it has the data type NVARCHAR."
+    },
+    {
+        "prompt": "How is MARA ,VBAK,VBAP tables in SAP related to each other",
+        "completion": " Here is how they are related.. 1. VBAK (Sales Document: Header Data): This table contains the header information for each sales document. Each row in this table represents a unique sales document. The VBELN column in this table is a unique identifier for each sales document.2. VBAP (Sales Document: Item Data): This table contains item-level data for each sales document. Each row in this table represents a unique item within a sales document. The VBELN column in this table is used to link each item to a sales document in the VBAK table. The MATNR column in this table is used to link each item to a material in the MARA table.3. MARA (Material Master Data): This table contains master data for each material. Each row in this table represents a unique material. The MATNR column in this table is a unique identifier for each material.The VBAK and VBAP tables are linked through the VBELN column, which represents the sales document number. The VBAP and MARA tables are linked through the MATNR column, which represents the material number.This means that for each sales document in the VBAK table, there can be multiple items in the VBAP table. Each of these items is linked to a material in the MARA table. This allows us to trace each item in a sales document back to its material master data."
+    },
+    {
+        "prompt": "What is the total quantity of sales document in the SAP?",
+        "completion": "SELECT COUNT(VBELN) AS num_sales_orders FROM VBAK"
+    },
+    {
+        "prompt": "How does the sales performed in last quarter in SAP dataset.",
+        "completion": "SELECT ERDAT AS day,SUM(NETWR) AS sales FROM VBAK WHERE ERDAT >= (ADD_DAYS (TO_DATE (CURRENT_DATE, 'YYYY-MM-DD'), -90)) GROUP BY ERDAT ORDER BY 1 DESC NULLS LAST;"
+    },
+    {
+        "prompt": "Can you summarize complete sales history for last 5 years in SAP?",
+        "completion": "SELECT ERDAT AS day,SUM(NETWR) AS sales FROM VBAK WHERE ERDAT >= (ADD_YEARS (TO_DATE (CURRENT_DATE, 'YYYY-MM-DD'), -5)) GROUP BY ERDAT ORDER BY 1 DESC NULLS LAST;"
+    },
+    {
+        "prompt": "Can you summarize complete sales history for last 10 years in SAP?",
+        "completion": "SELECT ERDAT AS day,SUM(NETWR) AS sales FROM VBAK WHERE ERDAT >= (ADD_YEARS (TO_DATE (CURRENT_DATE, 'YYYY-MM-DD'), -10)) GROUP BY ERDAT ORDER BY 1 DESC NULLS LAST;"
+    },
+    {
+        "prompt": "How does the sales performed in this year in SAP?",
+        "completion": "SELECT ERDAT AS day,SUM(NETWR) AS sales FROM VBAK WHERE YEAR(ERDAT) = (YEAR (TO_DATE (CURRENT_DATE, 'YYYY-MM-DD'))) GROUP BY ERDAT ORDER BY 1 DESC NULLS LAST;"
+    },
+    {
+        "prompt": "Can you tell me how does the sales history looks like from SAP ?",
+        "completion": "SELECT ERDAT AS day,SUM(NETWR) AS sales FROM VBAK GROUP BY ERDAT ORDER BY 1 DESC NULLS LAST;"
+    },
+    {
+        "prompt": "What are the currency type avaialble in Sales data (VBAK)?",
+        "completion": "SELECT WAERK,count(*) from VBAK group by WAERK;"
+    },
+    {
+        "prompt": "What is the total quantity of sales data avaialble in SEK currency and what is the net sales of it.",
+        "completion": "SELECT WAERK as currency,SUM(NETWR) AS sales FROM VBAK where WAERK = 'SEK' GROUP BY WAERK ;"
+    },
+    {
+        "prompt": "What is the total quantity and amount sold for each currency in the Sales information in SAP?",
+        "completion": "SELECT WAERK as currency,SUM(NETWR) AS sales from VBAK group by WAERK;"
+    },
+    {
+        "prompt": "What is the total sales in last quarter in USD",
+        "completion": "SELECT ERDAT AS day,SUM(NETWR) AS sales FROM VBAK WHERE ERDAT >= (ADD_DAYS (TO_DATE (CURRENT_DATE, 'YYYY-MM-DD'), -90)) and WAERK = 'USD' GROUP BY ERDAT ORDER BY 1 DESC NULLS LAST;"
+    },
+    {
+        "prompt": "List me top 10 customers by sales data in SAP?",
+        "completion": "SELECT KUNNR AS customer,SUM(NETWR) AS total_sales FROM VBAK GROUP BY KUNNR ORDER BY 2 DESC LIMIT 10;"
+    },
+    {
+        "prompt": "Which customer has highest sales in SAP?",
+        "completion": "SELECT KUNNR AS customer,SUM(NETWR) AS total_sales FROM VBAK GROUP BY KUNNR ORDER BY 2 DESC LIMIT 1;"
+    },
+    {
+        "prompt": "Which customer has highest sales in SAP last year",
+        "completion": "SELECT KUNNR AS customer,SUM(NETWR) AS total_sales FROM VBAK where ERDAT >= (ADD_YEARS (TO_DATE (CURRENT_DATE, 'YYYY-MM-DD'), -1)) GROUP BY KUNNR ORDER BY 2 DESC LIMIT 1;"
+    },
+    {
+        "prompt": "how many material types are available in SAP , can you list it down .",
+        "completion": "SELECT DISTINCT MTART AS material_type FROM MARA;"
+    },
+    {
+        "prompt": "Can I get some insights like top sales by product category?",
+        "completion": "SELECT C.MTART AS product_category,SUM(A.NETWR) AS total_sales FROM VBAK AS A JOIN VBAP AS B ON A.VBELN = B.VBELN JOIN MARA AS C ON B.MATNR = C.MATNR WHERE (A.NETWR) IS NOT NULL GROUP BY C.MTART ORDER BY 2 DESC LIMIT 10;"
+    },
+    {
+        "prompt": "Summarize the sales based on material type in SAP",
+        "completion": "SELECT C.MTART AS product_category,SUM(A.NETWR) AS total_sales FROM VBAK AS A JOIN VBAP AS B ON A.VBELN = B.VBELN JOIN MARA AS C ON B.MATNR = C.MATNR WHERE (A.NETWR) IS NOT NULL GROUP BY C.MTART ORDER BY 2 DESC;"
+    }
+    
+]
